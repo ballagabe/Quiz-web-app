@@ -58,6 +58,11 @@ export default {
       signUp: () => {
         alert("szia")
       }
+  },
+  mounted() {
+    if(this.$store.getters.isLogged){
+      this.$router.push({ path: 'dashboard' })
+    }
   }
 }
 </script>

@@ -4,22 +4,17 @@
       <h2>Ranklist</h2>
       <b-table striped borderless small :items="rankList" id="table"></b-table>
     </div>
-    <id id="gameMenu">
+    <div id="gameMenu">
       <h2>Game settings:</h2>
       <div id="box">
-        <h5>Select category:</h5>
-        <b-dropdown id="category" text="Category" variant="info">
-          <b-dropdown-item>Action A</b-dropdown-item>
-          <b-dropdown-item>Action B</b-dropdown-item>
-        </b-dropdown>
-        <h5>Select difficulty:</h5>
-        <b-dropdown id="difficulty" text="Difficulty" variant="info">
-          <b-dropdown-item><div :click="difficulty">Easy</div></b-dropdown-item>
-          <b-dropdown-item><div :click="difficulty">Easy</div></b-dropdown-item>
-          <b-dropdown-item><div :click="difficulty">Easy</div></b-dropdown-item>
-        </b-dropdown>
+        <h5>Difficulty:</h5>
+        <b-form-select v-model="type" :options="options" class="select"></b-form-select>
+        <router-link :to="{ name: 'Game', params: { type } }">
+          <b-button class="submitButton">Sart game</b-button>
+        </router-link>
+        
       </div>
-    </id>
+    </div>
   </div>
 </template>
 
@@ -74,13 +69,17 @@ export default {
             name: 'Gabor',
             score: 5321
           }
-          ]
+          ],
+        type: null,
+        options: [
+          { value: null, text: 'Please select difficulty' },
+          { value: 'easy', text: 'Easy' },
+          { value: 'medium', text: 'Medium' },
+          { value: 'hard', text: 'Hard' }
+        ]
       }
   },
   methods: {
-    diffculty: () => {
-      console.log(123)
-    }
   }
 }
 </script>
@@ -125,24 +124,33 @@ export default {
 }
 
 #gameMenu h2 {
-  margin-left: 6%;
+  margin-left: 15%;
   margin-top: 3%;
 }
 
 #box {
   display: flex;
   flex-direction: column; 
-  text-align: center;
-  align-items: center;
   width: 60%;
-  margin-top: 5%;
-  margin-left: 4%;
+  margin-left: 13%;
+}
 
+#box h5 {
+  margin-top: 5%;
 }
 
 #category {
   width: 35%;
   margin-top: 1%;
   margin-bottom: 6%;
+}
+
+.select {
+  width: 50%;
+}
+
+.submitButton {
+  width: 50%;
+  margin-top: 3%;
 }
 </style>

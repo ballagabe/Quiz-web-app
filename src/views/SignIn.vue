@@ -47,17 +47,23 @@ export default {
     //HelloWorld
   },
   data: function () {
-      return {
-          form: {
-            nickName: '',
-            password: ''
-          }
+    return {
+      form: {
+        nickName: '',
+        password: '',
+        logged: true
       }
+    }
   },
   methods: {
-      login: () => {
-        alert("szia")
-      }
+    login: () => {
+      alert("szia")
+    }
+  },
+  mounted() {
+    if(this.$store.getters.isLogged){
+      this.$router.push({ path: 'dashboard' })
+    }
   }
 }
 </script>

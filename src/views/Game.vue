@@ -6,16 +6,24 @@
             <b-button @click="start" variant="success" class="answerButton">Start game</b-button>
           </div>
           <div class="afterStart" v-else>
-            <div class="points">
-              <h4>Acquired points: {{this.points}}</h4>
+            <div v-if="!end">
+              <div class="points">
+                <h4>Acquired points: {{this.points}}</h4>
+              </div>
+              <b-progress :value="queue + 1" :max="maxQueue" show-value class="mb-3 w-25 m-auto"></b-progress>
+              <h4>{{this.time}}</h4>
+              <h4>Question:</h4>
+              <h5>{{questions[queue].question}}</h5>
+              <div class="buttons">
+                <b-button @click="next(true)" variant="info" class="answerButton">True</b-button>
+                <b-button @click="next(false)" variant="info" class="answerButton">False</b-button>
+              </div>
             </div>
-            <b-progress :value="queue + 1" :max="maxQueue" show-value class="mb-3 w-25 m-auto"></b-progress>
-            <h4>{{this.time}}</h4>
-            <h4>Question:</h4>
-            <h5>{{questions[queue].question}}</h5>
-            <div class="buttons">
-              <b-button @click="next(true)" variant="info" class="answerButton">True</b-button>
-              <b-button @click="next(false)" variant="info" class="answerButton">False</b-button>
+            <div v-else>
+              <h3>You reached {{points}} point</h3>
+              <router-link class="buttons" to="/dashboard">
+                <b-button variant="success">Go back to dashboard</b-button>
+              </router-link>
             </div>
           </div>
         </div>
@@ -35,14 +43,11 @@ export default {
       points: 0,
       queue: 0,
       maxQueue: 5,
-      time: 10,
+      time: 15,
       end: false
     }
   },
   methods: {
-    game(){
-      
-    },
     start() {
       this.started = true
       setInterval(this.countdown, 1000);
@@ -50,7 +55,7 @@ export default {
     next(decision){
       if(this.queue < 4) {
         this.checkAnswer(decision)
-        this.time = 60
+        this.time = 15
         this.queue++
       }else {
         !this.end ? this.checkAnswer(decision) : false
@@ -63,6 +68,8 @@ export default {
       this.time === 0 ? this.next(0) : false  
     },
     endGame() {
+      
+      
       console.log('vege')
     },
     checkAnswer(decision) {
@@ -117,5 +124,6 @@ h3, h4, h5{
 .buttons {
   display: flex;
   justify-content: center;
+  text-decoration: none;
 }
 </style>

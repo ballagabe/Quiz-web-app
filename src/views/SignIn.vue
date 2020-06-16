@@ -1,6 +1,6 @@
 <template>
   <div id="signIn">
-    <h1 id="title">QUIZ GAME</h1>
+    <h1 id="title">QUIZER</h1>
     <h4>SIGN IN</h4>
     <b-form @submit="login" id="form">
       <b-form-group

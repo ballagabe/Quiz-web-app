@@ -1,15 +1,28 @@
 <template>
   <div id="signUp">
-    <h1 id="title">QUIZ GAME</h1>
+    <h1 id="title">QUIZER</h1>
     <h4>SIGN UP</h4>
     <b-form @submit="signUp" id="form">
       <b-form-group
         id="input-group-1"
-        label="Nickname:"
+        label="Email:"
         label-for="input-1"
       >
         <b-form-input
           id="input-1"
+          v-model="form.email"
+          type="text"
+          required
+          placeholder="Enter email"
+        ></b-form-input>
+      </b-form-group>
+      <b-form-group
+        id="input-group-2"
+        label="Nickname:"
+        label-for="input-2"
+      >
+        <b-form-input
+          id="input-2"
           v-model="form.nickName"
           type="text"
           required
@@ -17,12 +30,12 @@
         ></b-form-input>
       </b-form-group>
       <b-form-group
-        id="input-group-1"
+        id="input-group-3"
         label="Password:"
-        label-for="input-1"
+        label-for="input-3"
       >
         <b-form-input
-          id="input-1"
+          id="input-3"
           v-model="form.password"
           type="password"
           required
@@ -30,7 +43,7 @@
         ></b-form-input>
       </b-form-group>
       <div id="buttons">
-        <b-button type="submit" class="submitButton">Sign Up</b-button>
+        <b-button :click="signUp" type="submit" class="submitButton">Sign Up</b-button>
         <router-link to="/"><b-button class="submitButton">Sign In </b-button></router-link>
       </div>
     </b-form>
@@ -49,6 +62,7 @@ export default {
   data: function () {
       return {
           form: {
+            email: '',
             nickName: '',
             password: ''
           }

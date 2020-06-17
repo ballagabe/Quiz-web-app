@@ -23,7 +23,7 @@
       >
         <b-form-input
           id="input-2"
-          v-model="form.nickName"
+          v-model="form.nickname"
           type="text"
           required
           placeholder="Enter nickname"
@@ -60,22 +60,63 @@ export default {
     //HelloWorld
   },
   data: function () {
-      return {
-          form: {
-            email: '',
-            nickName: '',
-            password: ''
-          }
-      }
+    return {
+        form: {
+          email: '',
+          nickname: '',
+          password: ''
+        }
+    }
   },
   methods: {
-      signUp: () => {
-        alert("szia")
+    signUp() {
+      let loginData = {
+        email: this.form.email,
+        nickname: this.form.nickname,
+        password: this.form.password
       }
+      fetch('http://localhost:3000/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginData),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if(data.signUp){
+          this.$router.push({ path: '/' })
+        }else{
+          console.log('hiba')
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error)
+      })
+    }
   },
-  mounted() {
-    if(this.$store.getters.isLogged){
-      this.$router.push({ path: 'dashboard' })
+  beforeCreate() {
+    if(localStorage.getItem('token') && localStorage.getItem('log')){
+      // Validate token
+      let token = localStorage.getItem('token')
+      fetch('http://localhost:3000/validate', {
+        method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          },
+          body: JSON.stringify({token: token}),
+      })
+      .then(data => data.json())
+      .then(data => {
+        if(data.log){
+          this.$router.push({ path: 'dashboard' })
+        }else{
+          localStorage.removeItem('token')
+          localStorage.removeItem('log')
+          console.log('Not valid token')
+        }
+      })
     }
   }
 }

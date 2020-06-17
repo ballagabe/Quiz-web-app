@@ -2,18 +2,18 @@
   <div id="signIn">
     <h1 id="title">QUIZER</h1>
     <h4>SIGN IN</h4>
-    <b-form @submit="login" id="form">
+    <b-form @submit="signIn" id="form">
       <b-form-group
         id="input-group-1"
-        label="Nickname:"
+        label="Email:"
         label-for="input-1"
       >
         <b-form-input
           id="input-1"
-          v-model="form.nickName"
-          type="text"
+          v-model="form.email"
+          type="email"
           required
-          placeholder="Enter nickname"
+          placeholder="Enter email"
         ></b-form-input>
       </b-form-group>
       <b-form-group
@@ -49,20 +49,62 @@ export default {
   data: function () {
     return {
       form: {
-        nickName: '',
+        email: '',
         password: '',
         logged: true
-      }
+      },
+      asd: 1
     }
   },
   methods: {
-    login: () => {
-      alert("szia")
+    signIn() {
+      let loginData = {
+        email: this.form.email,
+        password: this.form.password
+      }
+      fetch('http://localhost:3000/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginData),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if(data.log){
+          localStorage.setItem('token', data.token)
+          localStorage.setItem('log', 1)
+          this.$router.push({ path: 'dashboard' })
+        }else{
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error)
+      })
     }
   },
-  mounted() {
-    if(this.$store.getters.isLogged){
-      this.$router.push({ path: 'dashboard' })
+  beforeCreate() {
+    if(localStorage.getItem('token') && localStorage.getItem('log')){
+      // Validate token
+      let token = localStorage.getItem('token')
+      fetch('http://localhost:3000/validate', {
+        method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          },
+          body: JSON.stringify({token: token}),
+      })
+      .then(data => data.json())
+      .then(data => {
+        if(data.log){
+          this.$router.push({ path: 'dashboard' })
+        }else{
+          localStorage.removeItem('token')
+          localStorage.removeItem('log')
+          console.log('Not valid token')
+        }
+      })
     }
   }
 }

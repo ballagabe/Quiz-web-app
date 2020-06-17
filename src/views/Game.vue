@@ -68,9 +68,21 @@ export default {
       this.time === 0 ? this.next(0) : false  
     },
     endGame() {
-      
-      
-      console.log('vege')
+      let token = localStorage.getItem('token')
+      fetch('http://localhost:3000/question/push', {
+      method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({token: token, points: this.points}),
+      })
+      .then(data => data.json())
+      .then(data => {
+        console.log(data)
+        localStorage.removeItem('token')
+        localStorage.setItem('token', data.newToken)
+      })
     },
     checkAnswer(decision) {
       if(decision == true){
@@ -84,9 +96,40 @@ export default {
   mounted() {
     this.type ? this.gameType = this.type : this.$router.push('/')
     //fetch questions
-    fetch('https://opentdb.com/api.php?amount=5&category=9&difficulty=' + this.type + '&type=boolean')
+    fetch('http://localhost:3000/question?diff=' + this.type, {
+      method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+    })
     .then(data => data.json())
     .then(data => this.questions = data.results)
+  },
+  beforeCreate() {
+    if(localStorage.getItem('token') && localStorage.getItem('log')){
+      // Validate token
+      let token = localStorage.getItem('token')
+      fetch('http://localhost:3000/validate', {
+        method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          },
+          body: JSON.stringify({token: token}),
+      })
+      .then(data => data.json())
+      .then(data => {
+        if(!data.log){
+          localStorage.removeItem('token')
+          localStorage.removeItem('log')
+          console.log('Not valid token')
+          this.$router.push({ path: '/' })
+        }
+      })
+    }else{
+      this.$router.push({ path: '/' })
+    }
   }
 }
 </script>

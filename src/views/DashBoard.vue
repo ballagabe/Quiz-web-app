@@ -25,7 +25,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'DashBoard',
   data: function () {

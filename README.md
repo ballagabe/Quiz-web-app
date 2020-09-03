@@ -1,4 +1,7 @@
-# quizgame
+# Quizgame
+
+Backend: Express + MongoDB
+Frontend: Vue + Bootstrap
 
 ### Project setup
 ```

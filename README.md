@@ -5,6 +5,9 @@ Backend: Express + MongoDB
 ```
 Frontend: Vue + Bootstrap
 ```
+```
+Api: Open Trivia DB
+```
 ### Project setup
 ```
 npm install

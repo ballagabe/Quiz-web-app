@@ -1,6 +1,6 @@
 # Quizgame
 ```
-Backend: Express + MongoDB
+Backend: Express + Mongoose
 ```
 ```
 Frontend: Vue + Bootstrap

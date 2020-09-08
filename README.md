@@ -1,4 +1,7 @@
 # Quizgame
+
+![presentation gif](quiz.gif)
+
 ```
 Backend: Express + Mongoose
 ```
